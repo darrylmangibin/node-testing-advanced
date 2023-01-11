@@ -5,7 +5,7 @@ import supertest from 'supertest';
 
 describe('@middleware', () => {
   describe('authMiddleware', () => {
-    const endpoint = '/api/auth/test-auth-middleware';
+    const endpoint = '/api/auth/test-middleware';
 
     it('should return no token 401 error response', async () => {
       const res = await supertest(app).get(endpoint);
@@ -38,7 +38,7 @@ describe('@middleware', () => {
     });
 
     it('should return user in request and global', async () => {
-      const { user, token } = await signedIn();
+      const { user, token } = await signedIn({ role: 'admin' });
 
       const res = await supertest(app)
         .get(endpoint)
