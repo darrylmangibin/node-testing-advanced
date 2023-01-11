@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/darrylmangibin/node-testing-advanced#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.3",
     "colors": "^1.4.0",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
@@ -29,6 +30,7 @@
     "typescript": "^4.9.4"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/compression": "^1.7.2",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.15",
