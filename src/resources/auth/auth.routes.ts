@@ -1,3 +1,4 @@
+import authMiddleware from '@src/middleware/auth.middleware';
 import validationMiddleware from '@src/middleware/validation.middleware';
 import { Router } from 'express';
 import AuthController from './auth.controller';
@@ -14,6 +15,12 @@ class AuthRoutes implements AppRoutes {
   }
 
   public registerRoutes = () => {
+    this.router.get(
+      '/test-auth-middleware',
+      authMiddleware,
+      this.authController.testAuthMiddleware
+    );
+
     this.router.post(
       '/register',
       validationMiddleware(authRegisterValidation),

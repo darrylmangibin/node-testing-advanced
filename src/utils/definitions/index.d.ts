@@ -21,6 +21,14 @@ declare global {
   }
 
   var signedIn: (data?: Partial<UserData>) => Promise<{ user: UserDocument, token: string }>
+
+  var AuthUser: UserDocument;
+
+  namespace Express {
+    interface Request {
+      user: UserDocument
+    }
+  }
 }
 
 export {}

@@ -30,6 +30,17 @@ class AuthController {
       next(error);
     }
   };
+
+  public testAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      res.status(200).json({
+        reqUser: req.user,
+        globalAuthUser: AuthUser,
+      });
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default AuthController;
