@@ -16,7 +16,7 @@ describe(AUTH_SERVICE_PATH, () => {
       user = _user;
     });
 
-    it('should throw 401 error', async () => {
+    it('should throw error when credentials are invalid', async () => {
       await new AuthService()
         .login({ email: user.email, password: wrongPassword })
         .catch(error => {

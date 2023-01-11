@@ -63,6 +63,19 @@ class AuthController {
     }
   };
 
+  public updatePassword = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const updatedUserPassword = await this.authService.updatePassword(
+        req.user.id,
+        req.body
+      );
+
+      res.status(200).json(updatedUserPassword);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public testAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.status(200).json({

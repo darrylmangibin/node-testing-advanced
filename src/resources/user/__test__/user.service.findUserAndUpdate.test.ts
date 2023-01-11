@@ -22,7 +22,7 @@ describe(USER_SERVICE_PATH, () => {
       role: 'admin',
     } satisfies Partial<UserData>;
 
-    it('should throw 404 error when no user found', async () => {
+    it('should throw error when no user found', async () => {
       const invalidUserId = new Types.ObjectId().toString();
 
       await new UserService().findUserAndUpdate(invalidUserId, inputs).catch(error => {
@@ -34,7 +34,7 @@ describe(USER_SERVICE_PATH, () => {
       });
     });
 
-    it('should throw 422 error when validation failed', async () => {
+    it('should throw error when validation failed', async () => {
       await new UserService()
         .findUserAndUpdate(user.id, {
           name: '',

@@ -5,7 +5,7 @@ import UserService from '../user.service';
 
 describe(USER_SERVICE_PATH, () => {
   describe('UserService.findUserById', () => {
-    it('should throw 404 error whend no user found', async () => {
+    it('should throw error whend no user found', async () => {
       const invalidId = new Types.ObjectId().toString();
 
       await new UserService().findUserById(invalidId).catch(error => {

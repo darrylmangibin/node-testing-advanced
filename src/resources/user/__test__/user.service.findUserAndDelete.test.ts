@@ -7,7 +7,7 @@ import UserService from '../user.service';
 
 describe(USER_SERVICE_PATH, () => {
   describe('UserService.findUserAndDelete', () => {
-    it('should throw 404 error when no user found', async () => {
+    it('should throw error when no user found', async () => {
       const invalidUserId = new Types.ObjectId().toString();
 
       await new UserService().findUserAndDelete(invalidUserId).catch(error => {
