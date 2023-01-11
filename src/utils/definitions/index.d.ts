@@ -12,6 +12,11 @@ declare global {
       this.registerRoutes()
     }
   }
+
+  interface AppTimestamps {
+    createdAt: Date;
+    updatedAt: Date;
+  }
 }
 
 export {}
