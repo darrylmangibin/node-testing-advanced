@@ -1,10 +1,10 @@
 import { app } from '@src/server';
 import supertest from 'supertest';
 
-describe('AuthController', () => {
+describe('@resources/auth/auth.controller', () => {
   const endpoint = '/api/auth/profile';
 
-  describe(`getProfile GET - ${endpoint}`, () => {
+  describe(`AuthController.getProfile GET - ${endpoint}`, () => {
     it('should return current user details', async () => {
       const { user, token } = await signedIn();
 

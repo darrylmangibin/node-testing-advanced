@@ -51,6 +51,34 @@ class UserService {
       throw error;
     }
   };
+
+  public findUserAndUpdate = async (userId: string, body: Partial<UserData>) => {
+    const session = await mongoose.startSession();
+
+    try {
+      session.startTransaction();
+
+      const user = await this.User.findByIdAndUpdate(userId, body, {
+        new: true,
+        runValidators: true,
+        session,
+      });
+
+      if (!user) {
+        return notfoundException('User not found');
+      }
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return user;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
 }
 
 export default UserService;

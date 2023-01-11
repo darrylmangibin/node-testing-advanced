@@ -4,10 +4,10 @@ import { UserDocument } from '@src/resources/user/user.interface';
 import { app } from '@src/server';
 import supertest from 'supertest';
 
-describe(`AuthController`, () => {
+describe('@resources/auth/auth.controller', () => {
   const endpoint = '/api/auth/login';
 
-  describe(`login POST - ${endpoint}`, () => {
+  describe(`AuthController.login POST - ${endpoint}`, () => {
     let user: UserDocument;
     const password = faker.internet.password();
     const wrongPassword = faker.internet.password();
