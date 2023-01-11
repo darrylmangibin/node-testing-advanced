@@ -1,3 +1,4 @@
+import { UserData, UserDocument } from "@src/resources/user/user.interface";
 import { Router } from "express";
 import { JwtPayload } from "jsonwebtoken";
 
@@ -18,6 +19,8 @@ declare global {
   interface AppPayload extends JwtPayload {
     id: string
   }
+
+  var signedIn: (data?: Partial<UserData>) => Promise<{ user: UserDocument, token: string }>
 }
 
 export {}

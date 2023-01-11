@@ -1,6 +1,9 @@
 import { MongoMemoryReplSet } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 import 'dotenv/config';
+import { UserData } from '@src/resources/user/user.interface';
+import UserFactory from '@src/resources/user/user.factory';
+import signToken from '@src/utils/token/sign.token';
 
 let mongod: unknown;
 
@@ -38,3 +41,11 @@ afterAll(async () => {
 
   await mongoose.connection.close();
 });
+
+global.signedIn = async (data?: Partial<UserData>) => {
+  const user = await new UserFactory().create(data);
+
+  const token = signToken({ id: user.id });
+
+  return { user, token };
+};

@@ -9,7 +9,7 @@ import UserService from '@resources/user/user.service';
 import comparePassword from '@src/utils/password/compare.password';
 
 describe('@resources/user/user.service', () => {
-  describe('UserService create', () => {
+  describe('UserService.create', () => {
     it('should throw 400 error when email already exists', async () => {
       const user = await new UserFactory().create();
 
