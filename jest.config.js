@@ -15,4 +15,5 @@ module.exports = {
   },
   testMatch: ["**/__tests__/**/*.[jt]s?(x)", "**/?(*.)+(spec|test).[jt]s?(x)"],
   verbose: true,
+  setupFilesAfterEnv: ["./src/test/setupTest.ts"]
 };
