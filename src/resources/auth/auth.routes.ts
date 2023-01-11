@@ -16,13 +16,6 @@ class AuthRoutes implements AppRoutes {
   }
 
   public registerRoutes = () => {
-    this.router.get(
-      '/test-middleware',
-      authMiddleware,
-      adminMiddleware,
-      this.authController.testAuthMiddleware
-    );
-
     this.router.post(
       '/register',
       validationMiddleware(authRegisterValidation),
@@ -35,7 +28,17 @@ class AuthRoutes implements AppRoutes {
       this.authController.login
     );
 
-    this.router.route('/profile').get(authMiddleware, this.authController.getProfile);
+    this.router
+      .route('/profile')
+      .get(authMiddleware, this.authController.getProfile)
+      .put(authMiddleware, this.authController.updateProfile);
+
+    this.router.get(
+      '/test-middleware',
+      authMiddleware,
+      adminMiddleware,
+      this.authController.testAuthMiddleware
+    );
   };
 }
 

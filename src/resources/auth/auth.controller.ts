@@ -1,3 +1,4 @@
+import ErrorException from '@src/utils/exceptions/error.exception';
 import signToken from '@src/utils/token/sign.token';
 import { NextFunction, Request, Response } from 'express';
 import { UserRequestHandler } from '../user/user.interface';
@@ -37,6 +38,16 @@ class AuthController {
       const user = await this.userService.findUserById(req.user.id, req.query.populate);
 
       res.status(200).json(user);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public updateProfile: UserRequestHandler = async (req, res, next) => {
+    try {
+      const updatedUser = await this.userService.findUserAndUpdate(req.user.id, req.body);
+
+      res.status(200).json(updatedUser);
     } catch (error) {
       next(error);
     }
