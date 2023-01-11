@@ -8,7 +8,8 @@
     "dev": "nodemon",
     "build": "tsc",
     "test": "jest",
-    "endpoints": "node -r tsconfig-paths/register -r ts-node/register src/utils/scripts/endpoints.script"
+    "endpoints": "node -r tsconfig-paths/register -r ts-node/register src/utils/scripts/endpoints.script",
+    "seeder": "node -r tsconfig-paths/register -r ts-node/register src/utils/scripts/seeder.script"
   },
   "repository": {
     "type": "git",
