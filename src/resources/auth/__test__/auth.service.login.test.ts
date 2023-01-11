@@ -1,9 +1,10 @@
 import { faker } from '@faker-js/faker';
 import { UserDocument } from '@src/resources/user/user.interface';
 import ErrorException from '@src/utils/exceptions/error.exception';
+import { AUTH_SERVICE_PATH } from '../auth.constants';
 import AuthService from '../auth.service';
 
-describe('@resources/auth/auth.service', () => {
+describe(AUTH_SERVICE_PATH, () => {
   describe('AuthService.login', () => {
     let user: UserDocument;
     const password = faker.internet.password();

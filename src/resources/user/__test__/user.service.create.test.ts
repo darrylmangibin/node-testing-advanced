@@ -7,8 +7,9 @@ import { UserData } from '@resources/user/user.interface';
 import User from '@resources/user/user.model';
 import UserService from '@resources/user/user.service';
 import comparePassword from '@src/utils/password/compare.password';
+import { USER_SERVICE_PATH } from '../user.constants';
 
-describe('@resources/user/user.service', () => {
+describe(USER_SERVICE_PATH, () => {
   describe('UserService.create', () => {
     it('should throw 400 error when email already exists', async () => {
       const user = await new UserFactory().create();

@@ -1,10 +1,11 @@
 import ErrorException from '@src/utils/exceptions/error.exception';
 import { Types } from 'mongoose';
+import { USER_SERVICE_PATH } from '../user.constants';
 import UserFactory from '../user.factory';
 import User from '../user.model';
 import UserService from '../user.service';
 
-describe('@resources/user/user.service', () => {
+describe(USER_SERVICE_PATH, () => {
   describe('UserService.findUserAndDelete', () => {
     it('should throw 404 error when no user found', async () => {
       const invalidUserId = new Types.ObjectId().toString();

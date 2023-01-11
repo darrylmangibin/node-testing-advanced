@@ -3,11 +3,10 @@ import { faker } from '@faker-js/faker';
 import { UserDocument } from '@src/resources/user/user.interface';
 import { app } from '@src/server';
 import supertest from 'supertest';
+import { AUTH_CONTROLLER_PATH, AUTH_LOGIN_ENDPOINT } from '../auth.constants';
 
-describe('@resources/auth/auth.controller', () => {
-  const endpoint = '/api/auth/login';
-
-  describe(`AuthController.login POST - ${endpoint}`, () => {
+describe(AUTH_CONTROLLER_PATH, () => {
+  describe(`AuthController.login POST - ${AUTH_LOGIN_ENDPOINT}`, () => {
     let user: UserDocument;
     const password = faker.internet.password();
     const wrongPassword = faker.internet.password();
@@ -18,7 +17,7 @@ describe('@resources/auth/auth.controller', () => {
       user = _user;
     });
     it('should return 401 error response credentials are invalid', async () => {
-      const res = await supertest(app).post(endpoint).send({
+      const res = await supertest(app).post(AUTH_LOGIN_ENDPOINT).send({
         email: user.email,
         password: wrongPassword,
       });
@@ -30,7 +29,7 @@ describe('@resources/auth/auth.controller', () => {
     });
 
     it('should return 422 error response when inputs are invalid', async () => {
-      const res = await supertest(app).post(endpoint).send({
+      const res = await supertest(app).post(AUTH_LOGIN_ENDPOINT).send({
         email: '',
         password: '',
       });
@@ -46,7 +45,7 @@ describe('@resources/auth/auth.controller', () => {
     });
 
     it('should return token when successfully logging in', async () => {
-      const res = await supertest(app).post(endpoint).send({
+      const res = await supertest(app).post(AUTH_LOGIN_ENDPOINT).send({
         email: user.email,
         password,
       });

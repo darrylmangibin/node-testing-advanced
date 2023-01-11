@@ -53,6 +53,16 @@ class AuthController {
     }
   };
 
+  public deleteProfile: UserRequestHandler = async (req, res, next) => {
+    try {
+      const deletedUser = await this.userService.findUserAndDelete(req.user.id);
+
+      res.status(200).json(deletedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   public testAuthMiddleware = async (req: Request, res: Response, next: NextFunction) => {
     try {
       res.status(200).json({

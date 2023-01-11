@@ -1,8 +1,9 @@
 import { Types } from 'mongoose';
+import { USER_SERVICE_PATH } from '../user.constants';
 import UserFactory from '../user.factory';
 import UserService from '../user.service';
 
-describe('@resources/user/user.service', () => {
+describe(USER_SERVICE_PATH, () => {
   describe('UserService.findUserById', () => {
     it('should throw 404 error whend no user found', async () => {
       const invalidId = new Types.ObjectId().toString();

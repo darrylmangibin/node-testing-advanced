@@ -3,11 +3,10 @@ import { UserData, UserDocument } from '@src/resources/user/user.interface';
 import User from '@src/resources/user/user.model';
 import { app } from '@src/server';
 import supertest from 'supertest';
+import { AUTH_CONTROLLER_PATH, AUTH_PROFILE_ENDPOINT } from '../auth.constants';
 
-describe('@resources/auth/auth.controller', () => {
-  const endpoint = '/api/auth/profile';
-
-  describe(`AuthController.updateProfile PUT - ${endpoint}`, () => {
+describe(AUTH_CONTROLLER_PATH, () => {
+  describe(`AuthController.updateProfile PUT - ${AUTH_PROFILE_ENDPOINT}`, () => {
     let user: UserDocument;
     let token: string;
 
@@ -25,7 +24,7 @@ describe('@resources/auth/auth.controller', () => {
 
     it('should throw 422 error response when inputs are invalid', async () => {
       const res = await supertest(app)
-        .put(endpoint)
+        .put(AUTH_PROFILE_ENDPOINT)
         .send({
           name: '',
           email: '',
@@ -44,7 +43,7 @@ describe('@resources/auth/auth.controller', () => {
 
     it('should return updated profile success response when inputs are valid', async () => {
       const res = await supertest(app)
-        .put(endpoint)
+        .put(AUTH_PROFILE_ENDPOINT)
         .send(inputs)
         .set('Authorization', `Bearer ${token}`);
 

@@ -7,13 +7,12 @@ import { app } from '@src/server';
 import supertest from 'supertest';
 import verifyToken, { isAppPayload } from '@src/utils/token/verify.token';
 import User from '@src/resources/user/user.model';
+import { AUTH_CONTROLLER_PATH, AUTH_REGISTER_ENDPOINT } from '../auth.constants';
 
-describe('@resources/auth/auth.controller', () => {
-  const endpoint = '/api/auth/register';
-
-  describe(`AuthController.register POST - ${endpoint}`, () => {
+describe(AUTH_CONTROLLER_PATH, () => {
+  describe(`AuthController.register POST - ${AUTH_REGISTER_ENDPOINT}`, () => {
     it('should return 422 error response when inputs are invalid', async () => {
-      const res = await supertest(app).post(endpoint).send({
+      const res = await supertest(app).post(AUTH_REGISTER_ENDPOINT).send({
         name: '',
         email: '',
       });
@@ -32,7 +31,7 @@ describe('@resources/auth/auth.controller', () => {
     it('should return 400 error response when email already exists', async () => {
       const user = await new UserFactory().create();
 
-      const res = await supertest(app).post(endpoint).send({
+      const res = await supertest(app).post(AUTH_REGISTER_ENDPOINT).send({
         name: faker.name.fullName(),
         email: user.email,
         password: '123456',
@@ -51,7 +50,7 @@ describe('@resources/auth/auth.controller', () => {
         password: faker.internet.password(),
       } satisfies Partial<UserData>;
 
-      const res = await supertest(app).post(endpoint).send(inputs);
+      const res = await supertest(app).post(AUTH_REGISTER_ENDPOINT).send(inputs);
 
       expect(res.status).toBe(201);
       expect(res.body).toMatchObject({

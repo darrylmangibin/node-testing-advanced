@@ -31,7 +31,8 @@ class AuthRoutes implements AppRoutes {
     this.router
       .route('/profile')
       .get(authMiddleware, this.authController.getProfile)
-      .put(authMiddleware, this.authController.updateProfile);
+      .put(authMiddleware, this.authController.updateProfile)
+      .delete(authMiddleware, this.authController.deleteProfile);
 
     this.router.get(
       '/test-middleware',

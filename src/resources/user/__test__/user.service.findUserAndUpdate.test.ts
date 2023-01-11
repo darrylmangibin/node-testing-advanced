@@ -1,11 +1,12 @@
 import { faker } from '@faker-js/faker';
 import ErrorException from '@src/utils/exceptions/error.exception';
 import { Error, Types } from 'mongoose';
+import { USER_SERVICE_PATH } from '../user.constants';
 import { UserData, UserDocument, UserRole } from '../user.interface';
 import User from '../user.model';
 import UserService from '../user.service';
 
-describe('@resources/user/user.service', () => {
+describe(USER_SERVICE_PATH, () => {
   describe('UserService.findUserAndUpdate', () => {
     let user: UserDocument;
 
