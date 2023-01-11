@@ -6,9 +6,10 @@ import UserFactory from '@resources/user/user.factory';
 import { UserData } from '@resources/user/user.interface';
 import User from '@resources/user/user.model';
 import UserService from '@resources/user/user.service';
+import comparePassword from '@src/utils/password/compare.password';
 
-export default () => {
-  describe('create', () => {
+describe('@resources/user/user.service', () => {
+  describe('UserService create', () => {
     it('should throw 400 error when email already exists', async () => {
       const user = await new UserFactory().create();
 
@@ -53,7 +54,12 @@ export default () => {
 
       const user = await new UserService().create(inputs);
 
-      expect(await User.findById(user.id)).toBeDefined();
+      const newUser = await User.findById(user.id).select('password');
+
+      const isPasswordHashed = await comparePassword(inputs.password, newUser?.password);
+
+      expect(newUser).toBeDefined();
+      expect(isPasswordHashed).toBeTruthy();
     });
   });
-};
+});
