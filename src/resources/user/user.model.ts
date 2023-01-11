@@ -15,6 +15,10 @@ UserSchema.pre('save', async function (next) {
   this.password = await hashPassword(this.password);
 });
 
+UserSchema.pre('findOneAndRemove', async function (next) {
+  next();
+});
+
 const User = model<UserData, PaginateModel<UserDocument>>('User', UserSchema);
 
 export default User;

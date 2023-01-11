@@ -79,6 +79,30 @@ class UserService {
       throw error;
     }
   };
+
+  public findUserAndDelete = async (userId: string) => {
+    const session = await mongoose.startSession();
+
+    try {
+      session.startTransaction();
+
+      const user = await User.findOneAndRemove({ _id: userId }, { session });
+
+      if (!user) {
+        return notfoundException('User not found');
+      }
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return user;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
 }
 
 export default UserService;
