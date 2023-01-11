@@ -5,6 +5,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import compression from 'compression';
 import morgan from 'morgan';
+import listEndpoints from 'express-list-endpoints';
 
 import connectDatabase from '@utils/database/connect.database';
 import notFoundMiddleware from '@middleware/notFound.middleware';
@@ -28,6 +29,14 @@ class App {
 
       console.log(`Server running in ${process.env.NODE_ENV} at ${this.port}`.green.bold);
     });
+  }
+
+  public listEndpoints(path?: string) {
+    console.table(
+      listEndpoints(this.app).filter(endpoint =>
+        path ? endpoint.path.includes(path) : endpoint
+      )
+    );
   }
 
   private initializeDatabaseConnection = async () => {

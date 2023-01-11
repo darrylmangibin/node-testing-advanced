@@ -4,14 +4,10 @@ import { JwtPayload } from "jsonwebtoken";
 declare module 'definitions';
 
 declare global {
-  abstract class AppRoutes {
-    abstract path: string;
-    abstract router: Router;
-    abstract registerRoutes: function(): void;
-
-    constructor() {
-      this.registerRoutes()
-    }
+  interface AppRoutes {
+    public path: string;
+    public router: Router;
+    public registerRoutes: function(): void;
   }
 
   interface AppTimestamps {
