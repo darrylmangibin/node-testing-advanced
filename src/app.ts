@@ -7,6 +7,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 
 import connectDatabase from '@utils/database/connect.database';
+import notFoundMiddleware from '@middleware/notFound.middleware';
 
 class App {
   public app: Express = express();
@@ -14,6 +15,7 @@ class App {
   constructor(private port: number, routes: AppRoutes[]) {
     this.initializeMiddleware(cors(), helmet(), compression(), morgan('dev'));
     this.initializeRoutes(routes);
+    this.initializeNotFoundMiddleware();
   }
 
   public listen() {
@@ -41,6 +43,10 @@ class App {
     routes.forEach(route => {
       this.app.use(`/api/${route.path}`, route.router);
     });
+  }
+
+  private initializeNotFoundMiddleware() {
+    this.app.use(notFoundMiddleware);
   }
 }
 
