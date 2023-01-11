@@ -1,11 +1,21 @@
 import ErrorException from '@src/utils/exceptions/error.exception';
 import notfoundException from '@src/utils/exceptions/notfound.exception';
-import mongoose, { PopulateOptions } from 'mongoose';
+import mongoose, { FilterQuery, PaginateOptions, PopulateOptions } from 'mongoose';
 import { UserData } from './user.interface';
 import User from './user.model';
 
 class UserService {
   private User = User;
+
+  public findUsers = async (query: FilterQuery<UserData>, options: PaginateOptions) => {
+    try {
+      const results = await this.User.paginate(query, options);
+
+      return results;
+    } catch (error) {
+      throw error;
+    }
+  };
 
   public create = async (body: Partial<UserData>) => {
     const session = await mongoose.startSession();
