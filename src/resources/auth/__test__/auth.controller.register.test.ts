@@ -8,10 +8,10 @@ import supertest from 'supertest';
 import verifyToken, { isAppPayload } from '@src/utils/token/verify.token';
 import User from '@src/resources/user/user.model';
 
-const endpoint = '/api/auth/register';
+describe(`AuthController`, () => {
+  const endpoint = '/api/auth/register';
 
-describe('@resources/auth/auth.routes', () => {
-  describe(`AuthController.register POST - ${endpoint}`, () => {
+  describe(`register POST - ${endpoint}`, () => {
     it('should return 422 error response when inputs are invalid', async () => {
       const res = await supertest(app).post(endpoint).send({
         name: '',

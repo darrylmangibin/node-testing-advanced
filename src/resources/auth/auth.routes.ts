@@ -32,6 +32,8 @@ class AuthRoutes implements AppRoutes {
       validationMiddleware(authLoginValidation),
       this.authController.login
     );
+
+    this.router.route('/profile').get(authMiddleware, this.authController.getProfile);
   };
 }
 

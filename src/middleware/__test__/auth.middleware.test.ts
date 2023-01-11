@@ -44,7 +44,6 @@ describe('@middleware', () => {
         .get(endpoint)
         .set('Authorization', `Bearer ${token}`);
 
-      console.log(res.body);
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({
         reqUser: {

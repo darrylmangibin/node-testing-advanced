@@ -1,5 +1,6 @@
 import ErrorException from '@src/utils/exceptions/error.exception';
-import mongoose from 'mongoose';
+import notfoundException from '@src/utils/exceptions/notfound.exception';
+import mongoose, { PopulateOptions } from 'mongoose';
 import { UserData } from './user.interface';
 import User from './user.model';
 
@@ -28,6 +29,25 @@ class UserService {
       await session.abortTransaction();
       await session.endSession();
 
+      throw error;
+    }
+  };
+
+  public findUserById = async (userId: string, populate?: PopulateOptions) => {
+    try {
+      let query = this.User.findById(userId);
+
+      if (populate) {
+        query = query.populate<UserData>(populate);
+      }
+      const user = await query;
+
+      if (!user) {
+        return notfoundException('User not found');
+      }
+
+      return user;
+    } catch (error) {
       throw error;
     }
   };
