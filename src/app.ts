@@ -13,6 +13,7 @@ class App {
 
   constructor(private port: number, routes: AppRoutes[]) {
     this.initializeMiddleware(cors(), helmet(), compression(), morgan('dev'));
+    this.initializeRoutes(routes);
   }
 
   public listen() {
@@ -33,6 +34,12 @@ class App {
 
     handlers.forEach(handler => {
       this.app.use(handler);
+    });
+  }
+
+  private initializeRoutes(routes: AppRoutes[]) {
+    routes.forEach(route => {
+      this.app.use(`/api/${route.path}`, route.router);
     });
   }
 }
