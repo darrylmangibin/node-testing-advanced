@@ -38,3 +38,5 @@ abstract class FactoryDatabase<T extends {} = any, U extends {} = any> {
     await this.model.deleteMany();
   };
 }
+
+export default FactoryDatabase;
