@@ -96,16 +96,17 @@ class UserService {
     try {
       session.startTransaction();
 
-      const user = await User.findOneAndRemove({ _id: userId }, { session });
+      const user = await User.findById(userId);
 
       if (!user) {
         return notfoundException('User not found');
       }
+      const deleteUser = await user.remove({ session });
 
       await session.commitTransaction();
       await session.endSession();
 
-      return user;
+      return deleteUser;
     } catch (error) {
       await session.abortTransaction();
       await session.endSession();

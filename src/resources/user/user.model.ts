@@ -1,6 +1,7 @@
 import hashPassword from '@src/utils/password/hash.password';
 import { model, PaginateModel } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
+import Post from '../post/post.model';
 import { UserData, UserDocument } from './user.interface';
 
 import UserSchema from './user.schema';
@@ -15,7 +16,9 @@ UserSchema.pre('save', async function (next) {
   this.password = await hashPassword(this.password);
 });
 
-UserSchema.pre('findOneAndRemove', async function (next) {
+UserSchema.pre<UserDocument>('remove', async function (next) {
+  await Post.deleteMany({ user: this._id });
+
   next();
 });
 

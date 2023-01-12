@@ -1,7 +1,11 @@
+import PostFactory from '@src/resources/post/post.factory';
+import Post from '@src/resources/post/post.model';
 import { app } from '@src/server';
+import { httpSupertestRequest } from '@src/utils/customSupertest';
 import { Types } from 'mongoose';
 import supertest from 'supertest';
 import { USER_CONTROLLER_PATH, USER_ENDPOINT } from '../user.constants';
+import UserFactory from '../user.factory';
 
 describe(USER_CONTROLLER_PATH, () => {
   describe(`UserController.findUserAndDelete DELETE - ${USER_ENDPOINT}/:userId`, () => {
@@ -40,6 +44,24 @@ describe(USER_CONTROLLER_PATH, () => {
         name: regularUser.name,
         email: regularUser.email,
       });
+    });
+
+    it('should delete user posts', async () => {
+      const user = await new UserFactory().create();
+
+      const posts = await new PostFactory().createMany(5, { user: user.id });
+
+      const res = await httpSupertestRequest({
+        method: 'DELETE',
+        token: adminToken,
+        endpoint: `${USER_ENDPOINT}/${user.id}`,
+      });
+
+      expect(res.status).toBe(200);
+
+      for await (let post of posts) {
+        expect(await Post.findById(post.id)).toBeNull();
+      }
     });
   });
 });
