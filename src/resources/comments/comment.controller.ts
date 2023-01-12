@@ -1,9 +1,11 @@
+import ErrorException from '@src/utils/exceptions/error.exception';
 import notfoundException from '@src/utils/exceptions/notfound.exception';
 import optionsPaginate from '@src/utils/paginate/options.paginate';
 import { RequestHandler } from 'express';
 import { FilterQuery, PaginateOptions } from 'mongoose';
 import Post from '../post/post.model';
-import { CommentData } from './comment.interface';
+import { CommentData, CommentDocument } from './comment.interface';
+import Comment from './comment.model';
 import CommentService from './comment.service';
 
 class CommentController {
@@ -65,6 +67,35 @@ class CommentController {
       next(error);
     }
   };
+
+  public findCommentAndUpdate: RequestHandler = async (req, res, next) => {
+    try {
+      const comment = await Comment.findById(req.params.commentId);
+
+      if (!comment) {
+        return notfoundException('Comment not found');
+      }
+
+      this.checkCommentOwner(comment, req.user.id);
+
+      const updatedComment = await this.commentService.findCommentAndUpdate(
+        req.params.commentId,
+        {
+          ...req.body,
+        }
+      );
+
+      res.status(200).json(updatedComment);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  private checkCommentOwner(comment: CommentDocument, userId: string) {
+    if (comment.user.toString() !== userId) {
+      throw new ErrorException('Forbidden. Not allowed to perform this action', 403);
+    }
+  }
 }
 
 export default CommentController;

@@ -60,6 +60,33 @@ class CommentService {
       throw error;
     }
   };
+
+  public findCommentAndUpdate = async (commentId: string, body: Partial<CommentData>) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const comment = await this.Comment.findByIdAndUpdate(commentId, body, {
+        new: true,
+        runValidators: true,
+        session,
+      });
+
+      if (!comment) {
+        return notfoundException('Comment not found');
+      }
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return comment;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
 }
 
 export default CommentService;
