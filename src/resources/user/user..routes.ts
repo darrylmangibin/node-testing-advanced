@@ -4,6 +4,7 @@ import validationMiddleware from '@src/middleware/validation.middleware';
 import { Router } from 'express';
 import UserController from './user.controller';
 import { userUpdateValidation } from './user.validation';
+import PostRoutes from '../post/post.routes';
 
 class UserRoutes implements AppRoutes {
   public path = 'users';
@@ -16,6 +17,8 @@ class UserRoutes implements AppRoutes {
   }
 
   public registerRoutes() {
+    this.router.use('/:userId/posts', new PostRoutes().router);
+
     this.router.use(authMiddleware);
 
     this.router.route('/').get(this.userController.findUsers);

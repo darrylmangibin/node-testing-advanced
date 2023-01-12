@@ -15,6 +15,10 @@ class PostController {
         ...(req.query.filter as unknown as FilterQuery<PostData>),
       } satisfies FilterQuery<PostData>;
 
+      if (req.params.userId) {
+        query = { user: req.params.userId, ...query };
+      }
+
       const options = optionsPaginate(req.query);
 
       const results = await this.postService.findPosts(query, options);

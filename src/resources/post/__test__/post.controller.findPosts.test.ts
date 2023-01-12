@@ -1,3 +1,5 @@
+import { USER_ENDPOINT } from '@src/resources/user/user.constants';
+import UserFactory from '@src/resources/user/user.factory';
 import { httpSupertestRequest } from '@src/utils/customSupertest';
 import keysPaginate from '@src/utils/paginate/keys.paginate';
 import { FilterQuery, PaginateOptions, PopulateOptions } from 'mongoose';
@@ -66,6 +68,26 @@ describe(POST_CONTROLLER_PATH, () => {
             id: expect.any(String),
           })
         );
+      });
+    });
+  });
+
+  describe(`PostController.findPosts GET - ${USER_ENDPOINT}/:userId/posts`, () => {
+    it('should return user posts only', async () => {
+      const user = await new UserFactory().create();
+      const posts = await new PostFactory().createMany(5, { user: user.id });
+      const otherPosts = await new PostFactory().createMany(5);
+      const res = await httpSupertestRequest({
+        endpoint: `${USER_ENDPOINT}/${user.id}/posts`,
+        method: 'GET',
+        token: regularToken,
+      });
+
+      const docsIds = res.body.docs.map((doc: PostDocument) => doc.id);
+
+      docsIds.forEach((id: string) => {
+        expect(posts.map(post => post.id).includes(id)).toBeTruthy();
+        expect(otherPosts.map(post => post.id).includes(id)).toBeFalsy();
       });
     });
   });

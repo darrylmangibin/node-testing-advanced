@@ -6,7 +6,9 @@ import { postCreateOrUpdateValidaiton } from './post.validation';
 
 class PostRoutes implements AppRoutes {
   public path = 'posts';
-  public router = Router();
+  public router = Router({
+    mergeParams: true,
+  });
 
   private postController = new PostController();
 
