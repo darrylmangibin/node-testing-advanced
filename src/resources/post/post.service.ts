@@ -1,5 +1,5 @@
 import notfoundException from '@src/utils/exceptions/notfound.exception';
-import { FilterQuery, PaginateOptions } from 'mongoose';
+import mongoose, { FilterQuery, PaginateOptions } from 'mongoose';
 import { PostData } from './post.interface';
 import Post from './post.model';
 
@@ -26,6 +26,25 @@ class PostService {
 
       return post;
     } catch (error) {
+      throw error;
+    }
+  };
+
+  public createPost = async (body: Partial<PostData>) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const [post] = await this.Post.create([body], { session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return post;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
       throw error;
     }
   };

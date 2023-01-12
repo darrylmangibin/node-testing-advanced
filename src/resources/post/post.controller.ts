@@ -32,6 +32,19 @@ class PostController {
       next(error);
     }
   };
+
+  public createPost = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const post = await this.postService.createPost({
+        ...req.body,
+        user: req.user.id,
+      });
+
+      res.status(201).json(post);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default PostController;
