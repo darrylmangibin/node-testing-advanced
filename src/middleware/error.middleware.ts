@@ -3,6 +3,7 @@ import { ErrorRequestHandler } from 'express';
 import 'dotenv/config';
 import { Error } from 'mongoose';
 import Joi from 'joi';
+import { MongoServerError } from 'mongodb';
 
 const isString = (key: unknown): key is string => typeof key === 'string';
 
@@ -32,6 +33,16 @@ const errorMiddleware: ErrorRequestHandler = (err: ErrorException, req, res, nex
     });
 
     error = new ErrorException('Validation failed', 422, errorObject);
+  }
+
+  if (err instanceof MongoServerError) {
+    if (err.code === 11000) {
+      Object.keys(err.keyValue).forEach(key => {
+        errorObject[key] = `${err.keyValue[key]} already exists`;
+      });
+    }
+
+    error = new ErrorException('Already exists', 400, errorObject);
   }
 
   res.status(error.statusCode || 500).json({
