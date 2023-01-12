@@ -10,6 +10,14 @@ let mongod: unknown;
 const isMongoMemoryReplSet = (replSet: unknown): replSet is MongoMemoryReplSet =>
   replSet instanceof MongoMemoryReplSet;
 
+global.signedIn = async (data?: Partial<UserData>) => {
+  const user = await new UserFactory().create(data);
+
+  const token = signToken({ id: user.id });
+
+  return { user, token };
+};
+
 beforeAll(async () => {
   mongod = await MongoMemoryReplSet.create();
 
@@ -22,6 +30,16 @@ beforeAll(async () => {
       dbName: process.env.MONGO_DB_NAME,
     });
   }
+});
+
+beforeEach(async () => {
+  const regularSignedIn = await signedIn();
+  const adminSignedIn = await signedIn({ role: 'admin' });
+
+  global.regularUser = regularSignedIn.user;
+  global.regularToken = regularSignedIn.token;
+  global.adminUser = adminSignedIn.user;
+  global.adminToken = adminSignedIn.token;
 });
 
 afterEach(async () => {
@@ -41,11 +59,3 @@ afterAll(async () => {
 
   await mongoose.connection.close();
 });
-
-global.signedIn = async (data?: Partial<UserData>) => {
-  const user = await new UserFactory().create(data);
-
-  const token = signToken({ id: user.id });
-
-  return { user, token };
-};

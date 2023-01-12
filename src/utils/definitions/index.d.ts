@@ -23,6 +23,10 @@ declare global {
   var signedIn: (data?: Partial<UserData>) => Promise<{ user: UserDocument, token: string }>
 
   var AuthUser: UserDocument;
+  var regularUser: UserDocument;
+  var regularToken: string;
+  var adminUser: UserDocument;
+  var adminToken: string
 
   namespace Express {
     interface Request {

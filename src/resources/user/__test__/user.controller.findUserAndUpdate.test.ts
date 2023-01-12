@@ -7,10 +7,10 @@ import { UserData, UserDocument, UserRole } from '../user.interface';
 
 describe(USER_CONTROLLER_PATH, () => {
   describe(`UserController.findUserAndUpdate PUT - ${USER_ENDPOINT}/:userId`, () => {
-    let regularUser: UserDocument;
-    let adminUser: UserDocument;
-    let regularToken: string;
-    let adminToken: string;
+    // let regularUser: UserDocument;
+    // let adminUser: UserDocument;
+    // let regularToken: string;
+    // let adminToken: string;
 
     let request = async (endpoint: string, token?: string, body?: Partial<UserData>) => {
       return supertest(app)
@@ -25,15 +25,15 @@ describe(USER_CONTROLLER_PATH, () => {
       role: 'admin',
     } satisfies Partial<UserData>;
 
-    beforeEach(async () => {
-      const regularSignedIn = await signedIn();
-      const adminSignedIn = await signedIn({ role: 'admin' });
+    // beforeEach(async () => {
+    //   const regularSignedIn = await signedIn();
+    //   const adminSignedIn = await signedIn({ role: 'admin' });
 
-      regularUser = regularSignedIn.user;
-      regularToken = regularSignedIn.token;
-      adminUser = adminSignedIn.user;
-      adminToken = adminSignedIn.token;
-    });
+    //   regularUser = regularSignedIn.user;
+    //   regularToken = regularSignedIn.token;
+    //   adminUser = adminSignedIn.user;
+    //   adminToken = adminSignedIn.token;
+    // });
 
     it('should return 403 error response when user is not an admin', async () => {
       const res = await request(`${USER_ENDPOINT}/${adminUser.id}`, regularToken);

@@ -27,7 +27,8 @@ class UserRoutes implements AppRoutes {
         adminMiddleware,
         validationMiddleware(userUpdateValidation),
         this.userController.findUserAndUpdate
-      );
+      )
+      .delete(adminMiddleware, this.userController.findUserAndDelete);
   }
 }
 

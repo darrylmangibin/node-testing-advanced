@@ -5,7 +5,7 @@ import { UserData } from './user.interface';
 import UserService from './user.service';
 
 class UserController {
-  private userService = new UserService();
+  public userService = new UserService();
 
   public findUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -42,6 +42,21 @@ class UserController {
       );
 
       res.status(200).json(updatedUser);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public testing() {
+    console.log('testing');
+  }
+
+  public findUserAndDelete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      this.testing();
+      const deletedUser = await this.userService.findUserAndDelete(req.params.userId);
+
+      res.status(200).json(deletedUser);
     } catch (error) {
       next(error);
     }
