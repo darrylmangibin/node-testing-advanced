@@ -91,6 +91,26 @@ class CommentController {
     }
   };
 
+  public findCommentAndDelete: RequestHandler = async (req, res, next) => {
+    try {
+      const comment = await Comment.findById(req.params.commentId);
+
+      if (!comment) {
+        return notfoundException('Comment not found');
+      }
+
+      this.checkCommentOwner(comment, req.user.id);
+
+      const deletedComment = await this.commentService.findCommentAndDelete(
+        req.params.commentId
+      );
+
+      res.status(200).json(deletedComment);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   private checkCommentOwner(comment: CommentDocument, userId: string) {
     if (comment.user.toString() !== userId) {
       throw new ErrorException('Forbidden. Not allowed to perform this action', 403);

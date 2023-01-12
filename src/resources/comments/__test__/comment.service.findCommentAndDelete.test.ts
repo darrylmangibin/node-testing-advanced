@@ -1,17 +1,14 @@
 import { faker } from '@faker-js/faker';
 import ErrorException from '@src/utils/exceptions/error.exception';
-import keysPaginate from '@src/utils/paginate/keys.paginate';
 import { Error, Types } from 'mongoose';
 import { COMMENT_SERVICE_PATH } from '../comment.constant';
 import CommentFactory from '../comment.factory';
 import { CommentDocument } from '../comment.interface';
+import Comment from '../comment.model';
 import CommentService from '../comment.service';
 
 describe(COMMENT_SERVICE_PATH, () => {
   describe('CommentService.findCommentAndUpdate', () => {
-    const input = {
-      body: faker.lorem.paragraph(),
-    };
     let comment: CommentDocument;
 
     beforeEach(async () => {
@@ -20,7 +17,7 @@ describe(COMMENT_SERVICE_PATH, () => {
 
     it('should throw 404 error', async () => {
       await new CommentService()
-        .findCommentAndUpdate(new Types.ObjectId().toString(), input)
+        .findCommentAndDelete(new Types.ObjectId().toString())
         .catch(error => {
           expect(error).toBeInstanceOf(ErrorException);
           expect(error).toMatchObject({
@@ -30,25 +27,13 @@ describe(COMMENT_SERVICE_PATH, () => {
         });
     });
 
-    it('should throw 422 error', async () => {
-      await new CommentService().findCommentAndUpdate(comment.id, {}).catch(error => {
-        expect(error).toBeInstanceOf(Error.ValidationError);
-        expect(error.errors).toMatchObject({
-          body: expect.anything(),
-        });
-      });
-    });
+    it('should return deleted comment', async () => {
+      const deletedComment = await new CommentService().findCommentAndDelete(comment.id);
 
-    it('should return updated comment', async () => {
-      const commectFromService = await new CommentService().findCommentAndUpdate(
-        comment.id,
-        input
-      );
-
-      expect(commectFromService).toMatchObject({
+      expect(deletedComment).toMatchObject({
         id: comment.id,
-        body: expect.not.stringContaining(comment.body),
       });
+      expect(await Comment.findById(deletedComment.id)).toBeNull();
     });
   });
 });
