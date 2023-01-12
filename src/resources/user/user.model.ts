@@ -1,6 +1,7 @@
 import hashPassword from '@src/utils/password/hash.password';
 import { model, PaginateModel } from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
+import Comment from '../comments/comment.model';
 import Post from '../post/post.model';
 import { UserData, UserDocument } from './user.interface';
 
@@ -18,6 +19,7 @@ UserSchema.pre('save', async function (next) {
 
 UserSchema.pre<UserDocument>('remove', async function (next) {
   await Post.deleteMany({ user: this._id });
+  await Comment.deleteMany({ user: this._id });
 
   next();
 });

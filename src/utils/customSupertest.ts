@@ -7,7 +7,7 @@ export interface TttpSupertestRequestParams {
   method: HttpMethod;
   endpoint: string;
   token: string;
-  query?: string | object;
+  query?: any;
   body?: string | object;
 }
 

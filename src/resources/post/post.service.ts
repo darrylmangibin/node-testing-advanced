@@ -82,7 +82,7 @@ class PostService {
     try {
       session.startTransaction();
 
-      const post = await this.Post.findOneAndRemove({ _id: postId }, { session });
+      const post = await this.Post.findById(postId);
 
       if (!post) {
         return notfoundException('Post not found');
@@ -91,7 +91,9 @@ class PostService {
       await session.commitTransaction();
       await session.endSession();
 
-      return post;
+      const deletedPost = await post.remove({ session });
+
+      return deletedPost;
     } catch (error) {
       await session.abortTransaction();
       await session.endSession();

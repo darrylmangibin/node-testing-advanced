@@ -49,6 +49,9 @@ class SeederDatabase {
       console.log(`Generating comments...`.blue);
       await new CommentFactory().insertMany(commentsData);
 
+      console.log(`${await User.countDocuments()} users`.bgMagenta);
+      console.log(`${await Post.countDocuments()} users`.bgMagenta);
+      console.log(`${await Comment.countDocuments()} users`.bgMagenta);
       console.log('Data imported...'.green.bold);
 
       process.exit();
