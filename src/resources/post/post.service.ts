@@ -1,3 +1,4 @@
+import notfoundException from '@src/utils/exceptions/notfound.exception';
 import { FilterQuery, PaginateOptions } from 'mongoose';
 import { PostData } from './post.interface';
 import Post from './post.model';
@@ -10,6 +11,20 @@ class PostService {
       const results = await this.Post.paginate(query, options);
 
       return results;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+  public findPostById = async (postId: string) => {
+    try {
+      const post = await this.Post.findById(postId);
+
+      if (!post) {
+        return notfoundException('Post not found');
+      }
+
+      return post;
     } catch (error) {
       throw error;
     }

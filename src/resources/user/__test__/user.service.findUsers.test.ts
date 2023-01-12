@@ -1,12 +1,15 @@
 import keysPaginate from '@src/utils/paginate/keys.paginate';
 import { USER_ENDPOINT, USER_SERVICE_PATH } from '../user.constants';
 import UserFactory from '../user.factory';
+import User from '../user.model';
 import UserService from '../user.service';
 
 describe(USER_SERVICE_PATH, () => {
   describe(`UserService.findUsers GET - ${USER_ENDPOINT}`, () => {
     it('should return paginate results', async () => {
-      const users = await new UserFactory().createMany(15);
+      await new UserFactory().createMany(15);
+
+      const users = await User.find();
 
       const limit = 10;
       const page = 1;

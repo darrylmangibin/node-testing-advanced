@@ -4,6 +4,7 @@ import supertest from 'supertest';
 import { USER_CONTROLLER_PATH, USER_ENDPOINT } from '../user.constants';
 import UserFactory from '../user.factory';
 import { UserDocument } from '../user.interface';
+import User from '../user.model';
 
 describe(USER_CONTROLLER_PATH, () => {
   describe(`UserController.findUsers GET - ${USER_ENDPOINT}`, () => {
@@ -16,7 +17,9 @@ describe(USER_CONTROLLER_PATH, () => {
 
       user = loggedIn.user;
       token = loggedIn.token;
-      users = await new UserFactory().createMany(12);
+      await new UserFactory().createMany(12);
+
+      users = await User.find({ _id: { $ne: user.id } });
     });
 
     it('should return pagination response for users', async () => {

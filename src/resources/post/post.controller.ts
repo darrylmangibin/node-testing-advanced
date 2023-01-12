@@ -22,6 +22,16 @@ class PostController {
       next(error);
     }
   };
+
+  public findPostById = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const post = await this.postService.findPostById(req.params.postId);
+
+      res.status(200).json(post);
+    } catch (error) {
+      next(error);
+    }
+  };
 }
 
 export default PostController;
