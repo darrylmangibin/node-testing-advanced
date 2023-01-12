@@ -48,6 +48,33 @@ class PostService {
       throw error;
     }
   };
+
+  public findPostAndUpdate = async (postId: string, body: Partial<PostData>) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const post = await this.Post.findByIdAndUpdate(postId, body, {
+        new: true,
+        runValidators: true,
+        session,
+      });
+
+      if (!post) {
+        return notfoundException('Post not found');
+      }
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return post;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
+      throw error;
+    }
+  };
 }
 
 export default PostService;

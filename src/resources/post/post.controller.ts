@@ -1,7 +1,9 @@
+import ErrorException from '@src/utils/exceptions/error.exception';
+import notfoundException from '@src/utils/exceptions/notfound.exception';
 import optionsPaginate from '@src/utils/paginate/options.paginate';
 import { NextFunction, Request, Response } from 'express';
 import { FilterQuery } from 'mongoose';
-import { PostData } from './post.interface';
+import { PostData, PostDocument } from './post.interface';
 import PostService from './post.service';
 
 class PostController {
@@ -45,6 +47,33 @@ class PostController {
       next(error);
     }
   };
+
+  public findPostAndUpdate = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const post = await this.postService.findPostById(req.params.postId);
+
+      if (!post) {
+        return notfoundException('Post not found');
+      }
+
+      this.checkPostOwner(post, req.user.id);
+
+      const updatedPost = await this.postService.findPostAndUpdate(
+        req.params.postId,
+        req.body
+      );
+
+      res.status(200).json(updatedPost);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  private checkPostOwner(post: PostDocument, userId: string) {
+    if (post.user.toString() !== userId) {
+      throw new ErrorException('Forbidden. Not allowed to perform this action', 403);
+    }
+  }
 }
 
 export default PostController;
