@@ -45,6 +45,8 @@ class AuthRoutes implements AppRoutes {
       this.authController.updatePassword
     );
 
+    this.router.get('/posts', authMiddleware, this.authController.getPosts);
+
     this.router.get(
       '/test-middleware',
       authMiddleware,

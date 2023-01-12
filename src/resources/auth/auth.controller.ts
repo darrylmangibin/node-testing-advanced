@@ -1,6 +1,10 @@
 import ErrorException from '@src/utils/exceptions/error.exception';
+import optionsPaginate from '@src/utils/paginate/options.paginate';
 import signToken from '@src/utils/token/sign.token';
 import { NextFunction, Request, Response } from 'express';
+import { FilterQuery } from 'mongoose';
+import { PostData } from '../post/post.interface';
+import PostService from '../post/post.service';
 import { UserRequestHandler } from '../user/user.interface';
 import UserService from '../user/user.service';
 import AuthService from './auth.service';
@@ -8,6 +12,7 @@ import AuthService from './auth.service';
 class AuthController {
   private userService = new UserService();
   private authService = new AuthService();
+  private postService = new PostService();
 
   public register = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -71,6 +76,23 @@ class AuthController {
       );
 
       res.status(200).json(updatedUserPassword);
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  public getPosts = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const query = {
+        user: req.user.id,
+        ...(req.query.filter as unknown as FilterQuery<PostData>),
+      } satisfies FilterQuery<PostData>;
+
+      const options = optionsPaginate(req.query);
+
+      const results = await this.postService.findPosts(query, options);
+
+      res.status(200).json(results);
     } catch (error) {
       next(error);
     }
