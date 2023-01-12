@@ -69,6 +69,24 @@ class PostController {
     }
   };
 
+  public findPostAndDelete = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const post = await this.postService.findPostById(req.params.postId);
+
+      if (!post) {
+        return notfoundException('Post not found');
+      }
+
+      this.checkPostOwner(post, req.user.id);
+
+      const deletedPost = await this.postService.findPostAndDelete(req.params.postId);
+
+      res.status(200).json(deletedPost);
+    } catch (error) {
+      next(error);
+    }
+  };
+
   private checkPostOwner(post: PostDocument, userId: string) {
     if (post.user.toString() !== userId) {
       throw new ErrorException('Forbidden. Not allowed to perform this action', 403);

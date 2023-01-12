@@ -75,6 +75,29 @@ class PostService {
       throw error;
     }
   };
+
+  public findPostAndDelete = async (postId: string) => {
+    const session = await mongoose.startSession();
+
+    try {
+      session.startTransaction();
+
+      const post = await this.Post.findOneAndRemove({ _id: postId }, { session });
+
+      if (!post) {
+        return notfoundException('Post not found');
+      }
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return post;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+      throw error;
+    }
+  };
 }
 
 export default PostService;
