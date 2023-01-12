@@ -1,5 +1,5 @@
 import notfoundException from '@src/utils/exceptions/notfound.exception';
-import { FilterQuery, PaginateOptions, PopulateOptions } from 'mongoose';
+import mongoose, { FilterQuery, PaginateOptions, PopulateOptions } from 'mongoose';
 import { CommentData } from './comment.interface';
 import Comment from './comment.model';
 
@@ -38,6 +38,25 @@ class CommentService {
 
       return comment;
     } catch (error) {
+      throw error;
+    }
+  };
+
+  public createComment = async (body: Partial<CommentData>) => {
+    const session = await mongoose.startSession();
+    try {
+      session.startTransaction();
+
+      const [comment] = await this.Comment.create([body], { session });
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return comment;
+    } catch (error) {
+      await session.abortTransaction();
+      await session.endSession();
+
       throw error;
     }
   };
