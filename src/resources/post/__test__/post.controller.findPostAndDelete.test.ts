@@ -42,6 +42,8 @@ describe(POST_CONTROLLER_PATH, () => {
         token: regularToken,
       });
 
+      console.log(res.body);
+
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({
         id: post.id,

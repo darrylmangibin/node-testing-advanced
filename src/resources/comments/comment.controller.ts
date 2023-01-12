@@ -23,8 +23,6 @@ class CommentController {
 
       const options = optionsPaginate(req.query);
 
-      console.log(options);
-
       const results = await this.commentService.findComments(query, options);
 
       res.status(200).json(results);

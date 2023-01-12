@@ -88,10 +88,10 @@ class PostService {
         return notfoundException('Post not found');
       }
 
+      const deletedPost = await post.remove({ session });
+
       await session.commitTransaction();
       await session.endSession();
-
-      const deletedPost = await post.remove({ session });
 
       return deletedPost;
     } catch (error) {
