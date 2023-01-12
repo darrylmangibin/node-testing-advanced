@@ -16,6 +16,8 @@ class UserRoutes implements AppRoutes {
     this.router.use(authMiddleware);
 
     this.router.route('/').get(this.userController.findUsers);
+
+    this.router.route('/:userId').get(this.userController.findUserById);
   }
 }
 
