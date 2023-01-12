@@ -1,3 +1,4 @@
+import CommentFactory from '@src/resources/comments/comment.factory';
 import { USER_ENDPOINT } from '@src/resources/user/user.constants';
 import UserFactory from '@src/resources/user/user.factory';
 import { httpSupertestRequest } from '@src/utils/customSupertest';
@@ -13,7 +14,6 @@ describe(POST_CONTROLLER_PATH, () => {
     let limit = 10;
     let adminPosts: PostDocument[];
     let userPosts: PostDocument[];
-    let filter: FilterQuery<PostData> = {};
 
     beforeEach(async () => {
       adminPosts = await new PostFactory().createMany(8);
@@ -68,6 +68,41 @@ describe(POST_CONTROLLER_PATH, () => {
             id: expect.any(String),
           })
         );
+      });
+    });
+
+    it('should reverse populate comments in the docs', async () => {
+      const populate = [
+        {
+          path: 'comments',
+        },
+      ] satisfies PaginateOptions['populate'];
+
+      for await (let post of userPosts) {
+        await new CommentFactory().createMany(2, { post: post.id });
+      }
+
+      let res = await httpSupertestRequest({
+        endpoint: POST_ENDPOINT,
+        method: 'GET',
+        token: regularToken,
+        query: {
+          populate,
+        },
+      });
+
+      console.log(res.body);
+
+      res.body.docs.forEach((doc: PostDocument) => {
+        if (Number(doc.comments?.length) > 0) {
+          expect(doc.comments).toEqual(
+            expect.arrayContaining([
+              expect.objectContaining({
+                id: expect.any(String),
+              }),
+            ])
+          );
+        }
       });
     });
   });
